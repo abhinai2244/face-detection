@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: faceguard-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/blacklist:/app/blacklist
+      - ./backend/data:/app/data
+      - ./backend/uploads:/app/uploads
+      - ./backend/processed:/app/processed
+      # Mount InsightFace model cache so it's not re-downloaded on restart
+      - insightface-cache:/root/.insightface
+    environment:
+      - PYTHONUNBUFFERED=1
+    # Uncomment if you have an NVIDIA GPU:
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: faceguard-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_URL=http://localhost:8000
+      - VITE_WS_URL=ws://localhost:8000
+
+volumes:
+  insightface-cache:

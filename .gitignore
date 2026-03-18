@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+
+# Data & uploads (don't commit large files)
+backend/uploads/*
+backend/processed/*
+backend/data/embeddings.pkl
+!backend/uploads/.gitkeep
+!backend/processed/.gitkeep
+!backend/data/.gitkeep
+
+# Blacklist images (user data — don't commit)
+backend/blacklist/*/
+!backend/blacklist/README.md
+
+# InsightFace model cache
+~/.insightface/
+
+# Node
+node_modules/
+frontend/dist/
+frontend/.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
